@@ -38,6 +38,10 @@ public class DataWorker {
     private int[][] getDataFromRawDataString(String rawDataString) {
         String rawDataStringWithSize = getStringWithSizeOnly(rawDataString);
         String rawDataStringWithoutSize = getStringWithoutSize(rawDataString);
+        if (rawDataStringWithoutSize.trim().equals("")) {
+            System.err.println("empty field detected. app will exit");
+            System.exit(1);
+        }
         int rows = getNumberOfRows(rawDataStringWithSize);
         int columns = getNumberOfColumns(rawDataStringWithSize);
         return fillHedgehogFieldWithApples(rawDataStringWithoutSize, rows, columns);
@@ -68,7 +72,7 @@ public class DataWorker {
 
     private String getRowFromRawData(String rawData, int row) {
         String[] result = rawData.split("\n");
-        return result[row].replaceAll("[\\s]{2,}", " ").trim();     // regExp and trim() remove unnecessary spaces
+        return result[row].replaceAll("[\\s]{2,}", " ").trim();     // regExp and trim() remove excess spaces if necessary
     }
 
     private String getStringWithSizeOnly(String rawDataString) {
@@ -78,11 +82,22 @@ public class DataWorker {
 
     private int getNumberOfRows(String rawDataString) {
         int indexOfSpace = rawDataString.indexOf(' ');
-        return Integer.parseInt(rawDataString.substring(0, indexOfSpace));
+        int result = Integer.parseInt(rawDataString.substring(0, indexOfSpace));
+        checkInputSize(result);
+        return result;
     }
 
     private int getNumberOfColumns(String rawDataString) {
         int indexOfLastSpace = rawDataString.lastIndexOf(' ');
-        return Integer.parseInt(rawDataString.substring(indexOfLastSpace + 1, rawDataString.length()));
+        int result = Integer.parseInt(rawDataString.substring(indexOfLastSpace + 1, rawDataString.length()));
+        checkInputSize(result);
+        return result;
+    }
+
+    private void checkInputSize(int size) {
+        if (size <= 0) {
+            System.err.println("invalid size in field detected. app will exit");
+            System.exit(1);
+        }
     }
 }
