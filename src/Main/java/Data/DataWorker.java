@@ -67,8 +67,8 @@ public class DataWorker {
         for (int i = 0; i < columns; i++) {
             try {
                 result[i] = Integer.parseInt(split[i]);
-            } catch (NumberFormatException e) {
-                System.err.println("invalid char in " + i + " column, " + row + " row detected: " + split[i] + "\napp will exit");
+            } catch (Exception e) {
+                System.err.println("possibly invalid char in " + (i + 1) + " column, " + (row + 1) + " row" + "\napp will exit");
                 System.exit(1);
             }
         }
