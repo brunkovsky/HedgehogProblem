@@ -65,7 +65,12 @@ public class DataWorker {
         String[] split = rowString.split(" ");
         int[] result = new int[columns];
         for (int i = 0; i < columns; i++) {
-            result[i] = Integer.parseInt(split[i]);
+            try {
+                result[i] = Integer.parseInt(split[i]);
+            } catch (NumberFormatException e) {
+                System.err.println("invalid char in " + i + " column, " + row + " row detected: " + split[i] + "\napp will exit");
+                System.exit(1);
+            }
         }
         return result;
     }
@@ -82,14 +87,28 @@ public class DataWorker {
 
     private int getNumberOfRows(String rawDataString) {
         int indexOfSpace = rawDataString.indexOf(' ');
-        int result = Integer.parseInt(rawDataString.substring(0, indexOfSpace));
+        int result = 0;
+        String substring = rawDataString.substring(0, indexOfSpace);
+        try {
+            result = Integer.parseInt(substring);
+        } catch (NumberFormatException e) {
+            System.err.println("invalid char in first size row detected: " + substring + "\napp will exit");
+            System.exit(1);
+        }
         checkInputSize(result);
         return result;
     }
 
     private int getNumberOfColumns(String rawDataString) {
         int indexOfLastSpace = rawDataString.lastIndexOf(' ');
-        int result = Integer.parseInt(rawDataString.substring(indexOfLastSpace + 1, rawDataString.length()));
+        int result = 0;
+        String substring = rawDataString.substring(indexOfLastSpace + 1, rawDataString.length());
+        try {
+            result = Integer.parseInt(substring);
+        } catch (NumberFormatException e) {
+            System.err.println("invalid char in first size row detected: " + substring + "\napp will exit");
+            System.exit(1);
+        }
         checkInputSize(result);
         return result;
     }
